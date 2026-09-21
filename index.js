@@ -24,6 +24,19 @@ app.post('/assignments', async (req, res) => {
 })
 
 
+app.get('/assignments', async (req, res) => {
+  if (req.query.submitted === 'true') {
+    const result = await pool.query(
+      'SELECT * FROM assignments WHERE submitted = $1 ORDER BY id DESC',
+      [true]
+    )
+    return res.json(result.rows)
+  }
+  const result = await pool.query('SELECT * FROM assignments ORDER BY id DESC')
+  res.json(result.rows)
+})
+
+
 app.listen(3000, () => {
   console.log('Server is running')
 })
